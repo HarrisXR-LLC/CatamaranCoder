@@ -1,8 +1,5 @@
-# CatamaranCoder
-Catamaran Coder — Guided AI Coding
-
 # Catamaran Coder
-A single-file HTML/CSS/JS project by HarrisXR LLC. Licensed under the MIT License.
+Catamaran Coder — Guided AI Coding.  Catamaran Coder is a single-file HTML/CSS/JS project by HarrisXR LLC. Licensed under the MIT License.
 
 ## About
 Catamaran Coder is a self-contained tool for guiding AI prompts and navigating the coding changes suggested by the AI step-by-step. It’s free and open-source for all to use and modify.
