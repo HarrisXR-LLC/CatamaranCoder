@@ -1550,7 +1550,7 @@ button {
 
 <!-- ⦿ Section - Footer Bar -->
 <div class="footer-bar">
-  <span class="footer-text">v1.0.<!--{{### Version Here}}-->618<!-- {{Version Title Start}}--> - Adding GitHub<!-- {{Version Title End}}--> | MIT License | Anything you make belongs to you. | © 2025 HarrisXR LLC</span>
+  <span class="footer-text">v1.0.<!--{{### Version Here}}-->620<!-- {{Version Title Start}}--> - Adding GitHub (V2 PAT storage removed testing)<!-- {{Version Title End}}--> | MIT License | Anything you make belongs to you. | © 2025 HarrisXR LLC</span>
 </div>
     <!-- ========== END HTML CONTENT ========== -->
     
@@ -1641,6 +1641,7 @@ const app = {
         '<div style="margin-bottom: 20px;">',
         '<label for="githubRepoInput" style="display: block; margin-bottom: 8px; font-weight: 500; color: #666;">Repository Path:</label>',
         '<input type="text" id="githubRepoInput" placeholder="owner/repository" ',
+        'name="github-repository" autocomplete="username" ',
         'style="width: 100%; padding: 8px 12px; font-size: 14px; border: 1px solid #d1d1d1; border-radius: 4px; font-family: inherit;" />',
         '<div style="margin-top: 4px; font-size: 12px; color: #999;">Format: username/repository-name</div>',
         '</div>',
@@ -1649,9 +1650,10 @@ const app = {
         'Personal Access Token (Classic):',
         '</label>',
         '<input type="password" id="githubTokenInput" placeholder="ghp_xxxxxxxxxxxx" ',
+        'name="github-token" autocomplete="current-password" ',
         'style="width: 100%; padding: 8px 12px; font-size: 14px; border: 1px solid #d1d1d1; border-radius: 4px; font-family: inherit;" />',
         '<div style="margin-top: 4px; font-size: 12px; color: #999;">',
-        'Requires "repo" scope. ',
+        'Requires "repo" scope. Token is not stored - use a password manager for security. ',
         '<a href="https://github.com/settings/tokens/new" target="_blank" style="color: #0066cc;">Create token</a>',
         '</div>',
         '</div>',
@@ -1681,13 +1683,10 @@ const app = {
       // Load saved values from localStorage if they exist
       setTimeout(() => {
         const savedRepo = localStorage.getItem('catamaranCoder_githubRepo');
-        const savedToken = localStorage.getItem('catamaranCoder_githubToken');
+        // Token not loaded from storage - rely on password managers for security
 
         if (savedRepo) {
           document.getElementById('githubRepoInput').value = savedRepo;
-        }
-        if (savedToken) {
-          document.getElementById('githubTokenInput').value = savedToken;
         }
 
         // Focus the repo input
@@ -1718,9 +1717,9 @@ const app = {
         return;
       }
 
-      // Save values to localStorage for next time
+      // Save only repo path to localStorage (NOT the token for security)
       localStorage.setItem('catamaranCoder_githubRepo', repoPath);
-      localStorage.setItem('catamaranCoder_githubToken', token);
+      // Token is intentionally not stored - users should use password managers
 
       // Show loading status
       this.showStatus('Uploading to GitHub...', 'loading');
