@@ -1550,7 +1550,7 @@ button {
 
 <!-- ⦿ Section - Footer Bar -->
 <div class="footer-bar">
-  <span class="footer-text">v1.0.<!--{{### Version Here}}-->621<!-- {{Version Title Start}}--> - Adding GitHub (V2 PAT storage removed testing)<!-- {{Version Title End}}--> | MIT License | Anything you make belongs to you. | © 2025 HarrisXR LLC</span>
+  <span class="footer-text">v1.0.<!--{{### Version Here}}-->622<!-- {{Version Title Start}}--> - Adding GitHub (V3 filling commit message M1)<!-- {{Version Title End}}--> | MIT License | Anything you make belongs to you. | © 2025 HarrisXR LLC</span>
 </div>
     <!-- ========== END HTML CONTENT ========== -->
     
@@ -1661,7 +1661,7 @@ const app = {
         '<label for="githubMessageInput" style="display: block; margin-bottom: 8px; font-weight: 500; color: #666;">',
         'Commit Message (optional):',
         '</label>',
-        '<input type="text" id="githubMessageInput" placeholder="Update index.html" ',
+        '<input type="text" id="githubMessageInput" placeholder="V### - Version Title" ',
         'style="width: 100%; padding: 8px 12px; font-size: 14px; border: 1px solid #d1d1d1; border-radius: 4px; font-family: inherit;" />',
         '</div>',
         '<div style="display: flex; gap: 12px; justify-content: flex-end;">',
@@ -1688,6 +1688,58 @@ const app = {
         if (savedRepo) {
           document.getElementById('githubRepoInput').value = savedRepo;
         }
+
+        // Auto-populate commit message with version info
+
+        const htmlContent = app.elements.editors.html.value;
+
+        let commitMessage = 'Update index.html';
+
+        // Extract version number
+
+        let versionNumber = '';
+
+        const versionMatch = htmlContent.match(/<!--\{\{### Version Here\}\}-->(\d+)/);
+
+        if (versionMatch && versionMatch[1]) {
+
+          versionNumber = versionMatch[1];
+
+        }
+
+        // Extract version title
+
+        let versionTitle = '';
+
+        const titleMatch = htmlContent.match(/<!--\s*\{\{Version Title Start\}\}\s*-->([\s\S]*?)<!--\s*\{\{Version Title End\}\}\s*-->/);
+
+        if (titleMatch && titleMatch[1]) {
+
+          versionTitle = titleMatch[1];
+
+        }
+
+        // Build commit message
+
+        if (versionNumber || versionTitle) {
+
+          if (versionNumber && versionTitle) {
+
+            commitMessage = `V${versionNumber}${versionTitle}`;
+
+          } else if (versionNumber) {
+
+            commitMessage = `V${versionNumber} - Update index.html`;
+
+          } else if (versionTitle) {
+
+            commitMessage = versionTitle.trim();
+
+          }
+
+        }
+
+        document.getElementById('githubMessageInput').value = commitMessage;
 
         // Focus the repo input
         document.getElementById('githubRepoInput').focus();
