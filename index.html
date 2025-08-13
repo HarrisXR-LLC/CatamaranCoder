@@ -74,6 +74,38 @@ body {
   gap: 2px;
 }
 
+.header-title {
+  position: relative;
+}
+
+.title-download-button {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid #d1d1d1;
+  border-radius: 3px;
+  padding: 4px 8px;
+  cursor: pointer;
+  font-size: 11px;
+  transition: all 0.1s ease;
+  opacity: 0;
+  pointer-events: none;
+  white-space: nowrap;
+  z-index: 10;
+}
+
+.header-title:hover .title-download-button {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.title-download-button:hover {
+  background: #f0f0f0;
+  border-color: #666;
+}
+
 .header-subtitle {
   font-size: 12px;
   font-weight: 400;
@@ -1302,6 +1334,7 @@ input[type="checkbox"] {
       </h1>
       <div class="header-subtitle">— Guided AI Coding —</div>
       <div id="flavorText" class="flavor-text"></div>
+      <div class="title-download-button" onclick="app.clipboard.downloadToPC()" title="Download merged HTML to PC">Download to PC</div>
     </div>
 
     <button id="storeAsBtn" onclick="app.storeAs.show()" data-tooltip="Cache current session" data-tooltip-pos="bottom">Cache</button>
@@ -1474,6 +1507,9 @@ input[type="checkbox"] {
     <div class="fullscreen-popup-container">
       <div class="fullscreen-popup-header">
         <h2>Popup Title</h2>
+        <div id="cacheInfo" style="display: none; flex: 1; text-align: center; font-size: 12px; color: #666; padding: 0 20px;">
+          Sessions are stored temporarily in your browser cache - download to PC for permanent storage.
+        </div>
         <div class="fullscreen-popup-nav" id="diffNav" style="display: none;">
           <button onclick="app.diffCheck.prevDiff()">← Prev</button>
           <button onclick="app.diffCheck.nextDiff()">Next →</button>
@@ -1550,7 +1586,7 @@ button {
 
 <!-- ⦿ Section - Footer Bar -->
 <div class="footer-bar">
-  <span class="footer-text">v1.0.<!--{{### Version Here}}-->624<!-- {{Version Title Start}}--> -Making logo appear local<!-- {{Version Title End}}--> | MIT License | Anything you make belongs to you. | © 2025 HarrisXR LLC</span>
+  <span class="footer-text">v1.0.<!--{{### Version Here}}-->630<!-- {{Version Title Start}}--> - Adding explanation to Cache modal (V1 moved to top)<!-- {{Version Title End}}--> | MIT License | Anything you make belongs to you. | © 2025 HarrisXR LLC</span>
 </div>
     <!-- ========== END HTML CONTENT ========== -->
     
@@ -2203,6 +2239,12 @@ const app = {
       ].join('');
 
       app.fullscreenPopup.setContent('Cache', content);
+      
+      // Show the cache info in header
+      const cacheInfo = document.getElementById('cacheInfo');
+      if (cacheInfo) {
+        cacheInfo.style.display = 'block';
+      }
 
       // Auto-scroll sessions list to bottom by default
       setTimeout(() => {
@@ -3291,6 +3333,12 @@ const app = {
       // Hide diff navigation when closing
       const diffNav = document.getElementById('diffNav');
       diffNav.style.display = 'none';
+      
+      // Hide cache info when closing
+      const cacheInfo = document.getElementById('cacheInfo');
+      if (cacheInfo) {
+        cacheInfo.style.display = 'none';
+      }
 
       // Clear archive input when closing
       const archiveInput = document.getElementById('archiveHtmlInput');
@@ -5302,7 +5350,41 @@ const app = {
   },
 
   clipboard: {
+
+    downloadToPC() {
+      // Get the entire Catamaran Coder application HTML
+      const fullHTML = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
+
+      // Extract version from footer or use default
+      let version = '1.0';
+      const footerText = document.querySelector('.footer-text');
+      if (footerText) {
+        const versionMatch = footerText.textContent.match(/v([\d.]+(?:-\w+)?)/i);
+        if (versionMatch) {
+          version = versionMatch[1];
+        }
+      }
+
+      // Create filename
+      const filename = `Catamaran Coder - V${version}.html`;
+
+      // Create and download
+      const blob = new Blob([fullHTML], { type: 'text/html' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+
+      setTimeout(() => URL.revokeObjectURL(url), 100);
+
+      // No tooltip notification to avoid display issues
+    },
+
     fileHandler: {
+
       readFile(file) {
         return new Promise((resolve, reject) => {
           const reader = new FileReader();
