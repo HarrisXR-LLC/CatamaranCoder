@@ -1333,7 +1333,7 @@ input[type="checkbox"] {
       <h1>Catamaran Coder<supx class="tm-symbol">™</supx>
       </h1>
       <div class="header-subtitle">— Guided AI Coding —</div>
-      <div id="flavorText" class="flavor-text"></div>
+
       <div class="title-download-button" onclick="app.clipboard.downloadToPC()" title="Download merged HTML to PC">Download to PC</div>
     </div>
 
@@ -1403,7 +1403,7 @@ input[type="checkbox"] {
       <div class="textarea-icons">
       </div>
     </div>
-    <button id="useSelectionBtn" onclick="app.search.useSelection()" data-tooltip="Use top/bottom to select range" data-tooltip-pos="bottom">Use</button>
+    <button id="useSelectionBtn" onclick="app.search.useSelection()" data-tooltip="Select range between top/bottom" data-tooltip-pos="bottom">Select</button>
     <button id="applyRangeBtn" onclick="app.search.applyRange()" data-tooltip="Apply selection" data-tooltip-pos="bottom">Apply</button>
     <button id="diffCheckBtn" onclick="app.diffCheck.testDiff()" data-tooltip="Click to load diff libraries, then click again to check" data-tooltip-pos="bottom">Diff</button>
 
@@ -1579,14 +1579,14 @@ button {
       </div>
     </div>
     <div class="preview-container">
-      <iframe id="preview"></iframe>
+      <iframe id="preview" src="blob:https://harrisxr-llc.github.io/712b9422-16b2-44bf-af11-c745bf9e4be3"></iframe>
     </div>
   </div>
 </div>
 
 <!-- ⦿ Section - Footer Bar -->
 <div class="footer-bar">
-  <span class="footer-text">v1.0.<!--{{### Version Here}}-->630<!-- {{Version Title Start}}--> - Adding explanation to Cache modal (V1 moved to top)<!-- {{Version Title End}}--> | MIT License | Anything you make belongs to you. | © 2025 HarrisXR LLC</span>
+  <span class="footer-text">v1.0.<!--{{### Version Here}}-->640<!-- {{Version Title Start}}--> - Renamed use button to select<!-- {{Version Title End}}--> | MIT License | Anything you make belongs to you. | © 2025 HarrisXR LLC</span>
 </div>
     <!-- ========== END HTML CONTENT ========== -->
     
@@ -2239,7 +2239,7 @@ const app = {
       ].join('');
 
       app.fullscreenPopup.setContent('Cache', content);
-      
+
       // Show the cache info in header
       const cacheInfo = document.getElementById('cacheInfo');
       if (cacheInfo) {
@@ -3333,7 +3333,7 @@ const app = {
       // Hide diff navigation when closing
       const diffNav = document.getElementById('diffNav');
       diffNav.style.display = 'none';
-      
+
       // Hide cache info when closing
       const cacheInfo = document.getElementById('cacheInfo');
       if (cacheInfo) {
@@ -4759,7 +4759,7 @@ const app = {
       const selectedText = source.value.substring(source.selectionStart, source.selectionEnd);
 
       if (!selectedText) {
-        // No selection - auto-fill with first and last 20 characters
+        // No selection - auto-fill with first and last characters, skipping whitespace
         const fullText = source.value;
         if (!fullText) {
           // No text at all - show X
@@ -4778,9 +4778,20 @@ const app = {
         // Number of characters to extract from start/end
         const charCount = 40;
 
-        // Get first and last characters
-        const firstChars = fullText.substring(0, Math.min(charCount, fullText.length));
-        const lastChars = fullText.substring(Math.max(0, fullText.length - charCount));
+        // Smart extraction - skip leading/trailing whitespace
+        // For top field: skip leading whitespace and get meaningful content
+        let startIndex = 0;
+        while (startIndex < fullText.length && /\s/.test(fullText[startIndex])) {
+          startIndex++;
+        }
+        const firstChars = fullText.substring(startIndex, Math.min(startIndex + charCount, fullText.length)).trimEnd();
+
+        // For bottom field: skip trailing whitespace and get meaningful content
+        let endIndex = fullText.length - 1;
+        while (endIndex >= 0 && /\s/.test(fullText[endIndex])) {
+          endIndex--;
+        }
+        const lastChars = fullText.substring(Math.max(0, endIndex - charCount + 1), endIndex + 1).trimStart();
 
         topInput.value = firstChars;
         bottomInput.value = lastChars;
@@ -4797,8 +4808,14 @@ const app = {
         return;
       }
 
-      // Transfer the selected text to target
-      targetInput.value = selectedText;
+      // Transfer the selected text to target - trim appropriately based on direction
+      if (isTop) {
+        // For top field, trim trailing whitespace
+        targetInput.value = selectedText.trimEnd();
+      } else {
+        // For bottom field, trim leading whitespace  
+        targetInput.value = selectedText.trimStart();
+      }
 
       // Get the text from the other field
       const otherText = otherInput.value.trim();
@@ -5726,6 +5743,14 @@ Rules:
 6. STRICT STRUCTURE: Follow the exact JSON structure provided with no additional fields.
 
 7. REPLACE INSTANCES: Use "operation-replaceinstances" when you need to replace the same text multiple times across the codebase (e.g., renaming a variable, updating a repeated string, changing a class name used in multiple places).
+
+8. CATAMARAN CODER: This JSON will be processed by Catamaran Coder, a tool that manages HTML/CSS/JS as separate sections and automatically handles DOCTYPE, merging, and section comments. Don't include these wrapper elements in your changes.
+
+9. STEP LIMIT: Aim for 1-3 steps when possible, maximum 6 steps per response. If more than 6 steps are needed, stop and explain why, then wait for user approval before continuing.
+
+10. MAJOR REFACTORING: For changes affecting multiple components or requiring extensive restructuring, first propose a staged approach (e.g., "This requires 5 stages: 1) Extract components, 2) Create new structure...") and implement one stage at a time after user agreement.
+
+11. BEAUTIFY FORMATTING: Note that the code uses js-beautify with 2-space indentation often. Therefore especially for operation-replace "find" fields use 2-space indentation, not 4, and try and match the js-beauty rules. (The user when providing original merged HTML CSS JS code should have used js-beauty)
 
 Please analyze the code and provide the changes in this exact JSON structure.`;
 
