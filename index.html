@@ -1328,11 +1328,12 @@ input[type="checkbox"] {
     <div class="header">
   <!-- ⦿ Section - Primary Header Row (Logo, Title, Copy/Paste, Search) -->
   <div class="header-row">
-    <img src="catamarancoderlogo.png" alt="Catamaran Coder Logo" class="header-logo" onerror="this.style.display='none'">
+    <img src="catamarancoderlogo.png" alt="Catamaran Coder Logo" class="header-logo" onerror="this.style.display='none'" style="display: none;">
     <div class="header-title">
       <h1>Catamaran Coder<supx class="tm-symbol">™</supx>
       </h1>
       <div class="header-subtitle">— Guided AI Coding —</div>
+      <div id="flavorText" class="flavor-text"></div>
 
       <div class="title-download-button" onclick="app.clipboard.downloadToPC()" title="Download merged HTML to PC">Download to PC</div>
     </div>
@@ -1431,23 +1432,23 @@ input[type="checkbox"] {
   <!-- ⦿ Section - Step Information Row (Step Details and Fields) -->
 
   <div class="header-row">
-    <table class="step-info-table">
+    <table class="step-info-table has-section applied">
       <tbody>
         <tr>
           <td class="step-label">Step:</td>
-          <td id="stepNumber" class="step-number">-</td>
+          <td id="stepNumber" class="step-number">7 of 7 — ✓✓ (Applied)</td>
         </tr>
         <tr class="section-row">
           <td class="step-label">Section: <span style="cursor: pointer; color: #0066cc;" onclick="app.jsonOps.findSection()" title="Find this section">[↳]</span></td>
-          <td id="stepSection">-</td>
+          <td id="stepSection">&lt;!-- ========== JAVASCRIPT ========== --&gt;</td>
         </tr>
         <tr>
           <td class="step-label">Operation:</td>
-          <td id="stepOperation">-</td>
+          <td id="stepOperation">add</td>
         </tr>
         <tr>
           <td class="step-label">Explanation:</td>
-          <td id="stepExplanation">-</td>
+          <td id="stepExplanation">Restoring canvas context after screen shake (note: exceeds 6 steps but needed for proper cleanup)</td>
         </tr>
       </tbody>
     </table>
@@ -1491,7 +1492,7 @@ input[type="checkbox"] {
   <!-- ⦿ Section - Overlay Elements (Tooltips and Popups) -->
 
   <!-- Caret Tooltip -->
-  <div id="caretTooltip" class="caret-tooltip"></div>
+  <div id="caretTooltip" class="caret-tooltip above" style="left: 162px; top: 515.5px;">Presto, added!</div>
 
   <!-- Range Indicators -->
   <div id="topIndicator" class="range-indicator top-indicator"></div>
@@ -1500,14 +1501,14 @@ input[type="checkbox"] {
   <div id="bottomRangeLine" class="range-line"></div>
 
   <!-- Position-based Notification -->
-  <div id="positionNotify" class="position-notify"></div>
+  <div id="positionNotify" class="position-notify bottom" style="left: 456.5px; top: 223.5px;">V### +1'd, now what didja change?</div>
 
   <!-- Full Screen Popup -->
   <div id="fullscreenPopup" class="fullscreen-popup-backdrop">
     <div class="fullscreen-popup-container">
       <div class="fullscreen-popup-header">
-        <h2>Popup Title</h2>
-        <div id="cacheInfo" style="display: none; flex: 1; text-align: center; font-size: 12px; color: #666; padding: 0 20px;">
+        <h2>GitHub Upload</h2>
+        <div id="cacheInfo" style="display: none; flex: 1 1 0%; text-align: center; font-size: 12px; color: rgb(102, 102, 102); padding: 0px 20px;">
           Sessions are stored temporarily in your browser cache - download to PC for permanent storage.
         </div>
         <div class="fullscreen-popup-nav" id="diffNav" style="display: none;">
@@ -1522,28 +1523,26 @@ input[type="checkbox"] {
         </div>
         <button class="fullscreen-popup-close" onclick="app.fullscreenPopup.hide()" aria-label="Close">×</button>
       </div>
-      <div class="fullscreen-popup-content">
-        <!-- Content will go here -->
-      </div>
+      <div class="fullscreen-popup-content"><div style="max-width: 500px; margin: 0 auto;"><h3 style="margin-bottom: 20px; color: #000;">Upload to GitHub</h3><div style="margin-bottom: 20px;"><label for="githubRepoInput" style="display: block; margin-bottom: 8px; font-weight: 500; color: #666;">Repository Path:</label><input type="text" id="githubRepoInput" placeholder="owner/repository" name="github-repository" autocomplete="username" style="width: 100%; padding: 8px 12px; font-size: 14px; border: 1px solid #d1d1d1; border-radius: 4px; font-family: inherit;"><div style="margin-top: 4px; font-size: 12px; color: #999;">Format: username/repository-name</div></div><div style="margin-bottom: 20px;"><label for="githubTokenInput" style="display: block; margin-bottom: 8px; font-weight: 500; color: #666;">Personal Access Token (Classic):</label><input type="password" id="githubTokenInput" placeholder="ghp_xxxxxxxxxxxx" name="github-token" autocomplete="current-password" style="width: 100%; padding: 8px 12px; font-size: 14px; border: 1px solid #d1d1d1; border-radius: 4px; font-family: inherit;"><div style="margin-top: 4px; font-size: 12px; color: #999;">Requires "repo" scope. Token is not stored - use a password manager for security. <a href="https://github.com/settings/tokens/new" target="_blank" style="color: #0066cc;">Create token</a></div></div><div style="margin-bottom: 20px;"><label for="githubMessageInput" style="display: block; margin-bottom: 8px; font-weight: 500; color: #666;">Commit Message (optional):</label><input type="text" id="githubMessageInput" placeholder="V### - Version Title" style="width: 100%; padding: 8px 12px; font-size: 14px; border: 1px solid #d1d1d1; border-radius: 4px; font-family: inherit;"></div><div style="display: flex; gap: 12px; justify-content: flex-end;"><button onclick="app.fullscreenPopup.hide()" style="padding: 8px 24px; background: rgb(255, 255, 255); color: rgb(102, 102, 102); border: 1px solid rgb(209, 209, 209); border-radius: 4px; cursor: pointer; font-size: 14px; transition: 0.15s;" onmouseover="this.style.borderColor='#666'; this.style.background='#fafafa'" onmouseout="this.style.borderColor='#d1d1d1'; this.style.background='#fff'">Cancel</button><button onclick="app.github.upload()" style="padding: 8px 24px; background: rgb(0, 102, 204); color: rgb(255, 255, 255); border: 1px solid rgb(0, 102, 204); border-radius: 4px; cursor: pointer; font-size: 14px; transition: 0.15s;" onmouseover="this.style.background='#0052a3'" onmouseout="this.style.background='#0066cc'">Upload to GitHub</button></div><div id="githubStatus" style="margin-top: 20px; padding: 12px; border-radius: 4px; display: none;"></div></div></div>
     </div>
   </div>
 
   <!-- ⦿ Section - Code Editor Section (Tabs and Textareas) -->
   <div class="editor-section">
     <div class="editor-tabs">
-      <button class="tab active" onclick="app.tabs.switch('html')">HTML</button>
+      <button class="tab" onclick="app.tabs.switch('html')">HTML</button>
       <button class="tab" onclick="app.tabs.switch('css')">CSS</button>
-      <button class="tab" onclick="app.tabs.switch('js')">JavaScript</button>
+      <button class="tab active" onclick="app.tabs.switch('js')">JavaScript</button>
     </div>
 
     <div class="editor-container">
-      <textarea id="htmlEditor" class="editor active" placeholder="&lt;!-- Write your HTML here --&gt;" spellcheck="false">&lt;div class="container"&gt;
+      <textarea id="htmlEditor" class="editor state-applied" placeholder="&lt;!-- Write your HTML here --&gt;" spellcheck="false">&lt;div class="container"&gt;
   &lt;h1&gt;Hello World!&lt;/h1&gt;
   &lt;p&gt;Welcome to the code editor.&lt;/p&gt;
   &lt;button onclick="showMessage()"&gt;Click Me&lt;/button&gt;
 &lt;/div&gt;</textarea>
 
-      <textarea id="cssEditor" class="editor" placeholder="/* Write your CSS here */" spellcheck="false">.container {
+      <textarea id="cssEditor" class="editor state-applied" placeholder="/* Write your CSS here */" spellcheck="false">.container {
   text-align: center;
   padding: 50px;
   font-family: Arial, sans-serif;
@@ -1559,7 +1558,7 @@ button {
   cursor: pointer;
 }</textarea>
 
-      <textarea id="jsEditor" class="editor" placeholder="// Write your JavaScript here" spellcheck="false">function showMessage() {
+      <textarea id="jsEditor" class="editor active state-applied" placeholder="// Write your JavaScript here" spellcheck="false">function showMessage() {
   alert('Hello from the code editor!');
 }</textarea>
     </div>
@@ -1579,14 +1578,14 @@ button {
       </div>
     </div>
     <div class="preview-container">
-      <iframe id="preview" src="blob:https://harrisxr-llc.github.io/712b9422-16b2-44bf-af11-c745bf9e4be3"></iframe>
+      <iframe id="preview" src="blob:null/758231e1-70b4-4506-9818-0b55acacdba2"></iframe>
     </div>
   </div>
 </div>
 
 <!-- ⦿ Section - Footer Bar -->
 <div class="footer-bar">
-  <span class="footer-text">v1.0.<!--{{### Version Here}}-->640<!-- {{Version Title Start}}--> - Renamed use button to select<!-- {{Version Title End}}--> | MIT License | Anything you make belongs to you. | © 2025 HarrisXR LLC</span>
+  <span class="footer-text">v1.0.<!--{{### Version Here}}-->641<!-- {{Version Title Start}}--> - Fixed the flavor text<!-- {{Version Title End}}--> | MIT License | Anything you make belongs to you. | © 2025 HarrisXR LLC</span>
 </div>
     <!-- ========== END HTML CONTENT ========== -->
     
